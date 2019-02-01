@@ -20,7 +20,9 @@ func main() {
 	log.Print("Initializing twfeel API server...")
 
 	// router
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
 
 	// api
 	v1 := r.Group("/v1")

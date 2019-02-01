@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,9 +14,7 @@ var (
 
 func feelHandler(c *gin.Context) {
 
-	start := time.Now()
-
-	token := c.Param("token")
+	token := c.Query("token")
 	if token != knownToken {
 		log.Printf("invalid token. Got:%s Expected:%s", token, knownToken)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -46,9 +43,6 @@ func feelHandler(c *gin.Context) {
 		})
 		return
 	}
-
-	elapsed := time.Since(start)
-	log.Printf("Query duration: %s", elapsed)
 
 	c.JSON(http.StatusOK, result)
 

@@ -12,7 +12,7 @@ spec:
             demo: twfeel
         spec:
           container:
-            image: gcr.io/s9-demo/kapi:latest
+            image: gcr.io/s9-demo/twfeel:latest
             imagePullPolicy: Always
             env:
             - name: RELEASE
