@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"net/http/httputil"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +13,10 @@ import (
 const (
 	defaultPort      = "8080"
 	portVariableName = "PORT"
+)
+
+var (
+	knownToken = os.Getenv("ACCESS_TOKEN")
 )
 
 func main() {
@@ -28,6 +32,7 @@ func main() {
 	v1 := r.Group("/v1")
 	{
 		v1.GET("/feel/:query", feelHandler)
+		v1.POST("/chat", chatHandler)
 	}
 
 	// root

@@ -16,7 +16,7 @@ spec:
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.1.1"
+              value: "v0.1.5"
             - name: GIN_MODE
               value: "release"
             - name: ACCESS_TOKEN

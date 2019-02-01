@@ -37,6 +37,7 @@ var (
 // SentimentResult represents results of the job
 type SentimentResult struct {
 	ID        string    `json:"id"`
+	Query        string    `json:"query"`
 	QueryOn   time.Time `json:"ts"`
 	Tweets    int     `json:"tweets"`
 	NonRT    int     `json:"nonRT"`
@@ -75,9 +76,11 @@ func search(ctx context.Context, query string) (r *SentimentResult, err error) {
 	// results
 	result := &SentimentResult{
 		ID:      newID(),
-		Tweets:  len(search.Statuses),
+		Query:   query,
 		QueryOn: time.Now(),
+		Tweets:  len(search.Statuses),
 	}
+
 
 	contents := make([]string, 0)
 	log.Printf("Found: %d", result.Tweets)
