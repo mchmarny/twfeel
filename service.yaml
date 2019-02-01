@@ -16,15 +16,31 @@ spec:
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.1.7"
-            - name: REDIS_HOST
-              value: "redis.demo.svc.cluster.local:6379"
-            - name: REDIS_QUEUE
-              value: "events"
+              value: "v0.1.1"
             - name: GIN_MODE
               value: "release"
-            - name: REDIS_PASS
+            - name: ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:
-                  name: redis-secrets
-                  key: REDIS_PASS
+                  name: twfeel-secrets
+                  key: ACCESS_TOKEN
+            - name: T_CONSUMER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: twfeel-secrets
+                  key: T_CONSUMER_KEY
+            - name: T_CONSUMER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: twfeel-secrets
+                  key: T_CONSUMER_SECRET
+            - name: T_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: twfeel-secrets
+                  key: T_ACCESS_TOKEN
+            - name: T_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: twfeel-secrets
+                  key: T_ACCESS_SECRET

@@ -20,12 +20,18 @@ const (
 )
 
 var (
+	// twitter API secrets
+	consumerKey = os.Getenv("T_CONSUMER_KEY")
+	consumerSecret = os.Getenv("T_CONSUMER_SECRET")
+	accessToken = os.Getenv("T_ACCESS_TOKEN")
+	accessSecret = os.Getenv("T_ACCESS_SECRET")
+
+	// validation expressions
 	userReg = regexp.MustCompile(`@[\w]*`)
 	nonCharReg = regexp.MustCompile(`[^a-zA-Z#]`)
 	shortReg = regexp.MustCompile(`\b[a-z]{1,2}\b`)
 	uriREg = regexp.MustCompile(`http[s]?\:\/\/.[a-zA-Z0-9\.\/\-]+`)
 	newLineReg = regexp.MustCompile(`^[\r\n]+|\.|[\r\n]+$`)
-
 )
 
 // SentimentResult represents results of the job
@@ -40,11 +46,6 @@ type SentimentResult struct {
 }
 
 func search(ctx context.Context, query string) (r *SentimentResult, err error) {
-
-	consumerKey := os.Getenv("T_CONSUMER_KEY")
-	consumerSecret := os.Getenv("T_CONSUMER_SECRET")
-	accessToken := os.Getenv("T_ACCESS_TOKEN")
-	accessSecret := os.Getenv("T_ACCESS_SECRET")
 
 	if consumerKey == "" || consumerSecret == "" || accessToken == "" || accessSecret == "" {
 		return nil, errors.New("Both, consumer key/secret and access token/secret are required")
