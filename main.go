@@ -15,10 +15,6 @@ const (
 	portVariableName = "PORT"
 )
 
-var (
-	knownToken = os.Getenv("ACCESS_TOKEN")
-)
-
 func main() {
 
 	log.Print("Initializing twfeel API server...")

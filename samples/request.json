@@ -1,0 +1,40 @@
+{
+    "type": "MESSAGE",
+    "eventTime": "2019-02-01T15:10:25.965370Z",
+    "token": "2EqPk9oS8Ewp7QlZeIq0TEyLROfl6ZaY0hLbioFlbJg=",
+    "message": {
+        "name": "spaces/qedtXAAAAAE/messages/sbJQ5O4mIsE.sbJQ5O4mIsE",
+        "sender": {
+            "name": "users/113053863377153181042",
+            "displayName": "Mark Chmarny",
+            "avatarUrl": "https://lh5.googleusercontent.com/-V8ioYBHUE_E/AAAAAAAAAAI/AAAAAAAAAzE/dwwPp1hAvMY/photo.jpg",
+            "email": "mchmarny@google.com",
+            "type": "HUMAN"
+        },
+        "createTime": "2019-02-01T15:10:25.965370Z",
+        "text": "knative",
+        "thread": {
+            "name": "spaces/qedtXAAAAAE/threads/sbJQ5O4mIsE",
+            "retentionSettings": {
+                "state": "EPHEMERAL_ONE_DAY",
+                "expiryTimestamp": "1549120225876000"
+            }
+        },
+        "space": {
+            "name": "spaces/qedtXAAAAAE",
+            "type": "DM"
+        },
+        "argumentText": "knative"
+    },
+    "user": {
+        "name": "users/113053863377153181042",
+        "displayName": "Mark Chmarny",
+        "avatarUrl": "https://lh5.googleusercontent.com/-V8ioYBHUE_E/AAAAAAAAAAI/AAAAAAAAAzE/dwwPp1hAvMY/photo.jpg",
+        "email": "mchmarny@google.com",
+        "type": "HUMAN"
+    },
+    "space": {
+        "name": "spaces/qedtXAAAAAE",
+        "type": "DM"
+    }
+}

@@ -1,18 +1,27 @@
 package main
 
+// Request object
+type Request struct {
+	MessageType string   `json:"type"`
+	EventTime   string   `json:"eventTime"`
+	Token       string   `json:"token"`
+	Message     *Message `json:"message"`
+}
+
+// Message object
+type Message struct {
+	Name         string `json:"name,omitempty"`
+	Sender       *User  `json:"sender,omitempty"`
+	CreateTime   string `json:"createTime,omitempty"`
+	Text         string `json:"text,omitempty"`
+	ArgumentText string `json:"argumentText,omitempty"`
+}
+
 // User object
 type User struct {
 	Name        string `json:"name"`
 	DisplayName string `json:"displayName"`
 	AvatarURL   string `json:"avatarUrl"`
-}
-
-// Message object
-type Message struct {
-	Name       string `json:"name,omitempty"`
-	Sender     User   `json:"sender,omitempty"`
-	CreateTime string `json:"createTime,omitempty"`
-	Text       string `json:"text,omitempty"`
 }
 
 // Result object

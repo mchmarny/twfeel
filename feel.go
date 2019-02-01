@@ -3,8 +3,13 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
+)
+
+var (
+	knownToken = os.Getenv("ACCESS_TOKEN")
 )
 
 func feelHandler(c *gin.Context) {
