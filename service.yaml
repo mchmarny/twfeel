@@ -1,0 +1,30 @@
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: twfeel
+  namespace: demo
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        metadata:
+          labels:
+            demo: twfeel
+        spec:
+          container:
+            image: gcr.io/s9-demo/kapi:latest
+            imagePullPolicy: Always
+            env:
+            - name: RELEASE
+              value: "v0.1.7"
+            - name: REDIS_HOST
+              value: "redis.demo.svc.cluster.local:6379"
+            - name: REDIS_QUEUE
+              value: "events"
+            - name: GIN_MODE
+              value: "release"
+            - name: REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secrets
+                  key: REDIS_PASS
