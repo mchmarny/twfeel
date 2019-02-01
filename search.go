@@ -60,6 +60,11 @@ func search(ctx context.Context, query string) (r *SentimentResult, err error) {
 	httpClient := config.Client(ctx, token)
 	client := twitter.NewClient(httpClient)
 
+
+	// TODO: Add debugging for rate limits
+	// rateArgs := &twitter.RateLimitParams{}
+	// client.RateLimits.Status()
+
 	searchArgs := &twitter.SearchTweetParams{
 		Query:      query,
 		Count:      100,

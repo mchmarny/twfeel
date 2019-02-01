@@ -70,10 +70,15 @@ func chatHandler(c *gin.Context) {
 		sentiment = "negative"
 	}
 
-	txt := "Hi %s, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is *%s* (magnitude: *%f*)"
+	txt := "Hi %s, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is *%s* (magnitude: *%f*)%s"
+
+	rateLimitInfo := ""
+	if result.Score == 0 {
+		rateLimitInfo = " - Twitter rate-limited :("
+	}
 
 	rez := &Message{
-		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude),
+		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude, rateLimitInfo),
 	}
 
 	c.JSON(http.StatusOK, rez)
