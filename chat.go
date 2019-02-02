@@ -46,7 +46,7 @@ func chatHandler(c *gin.Context) {
 		return
 	}
 
-	senderName := post.Message.Sender.DisplayName
+	senderName := post.Message.Sender.Name
 	queryText := strings.Trim(post.Message.ArgumentText, " ")
 	log.Printf("Query: %s", queryText)
 
@@ -61,13 +61,18 @@ func chatHandler(c *gin.Context) {
 		return
 	}
 
+
 	// format results
-	sentiment := ":)"
-	if result.Score < 0 {
-		sentiment = ":("
+	sentiment := ""
+	if result.Score < -0.2 && result.Magnitude > magnitudeThreshold  {
+		sentiment = "`:(` negative"
+	} else if result.Score > 0.2 && result.Magnitude > magnitudeThreshold {
+		sentiment = "`:)` *positive*"
+	} else {
+		sentiment = "`:|` *meh*"
 	}
 
-	txt := "Hi %s, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is *%s* (meta: magnitude of *%.2f*, score *%.2f* based on *%d* non-RT)"
+	txt := "Hi <%s>, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s  -- meta: magnitude of *%.2f*, score *%.2f* based on *%d* non-RT"
 
 	rez := &Message{
 		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude, result.Score, result.NonRT),

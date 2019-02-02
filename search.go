@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	magnitudeThreshold     = 0.1
+	magnitudeThreshold     = 0.2
 )
 
 var (
