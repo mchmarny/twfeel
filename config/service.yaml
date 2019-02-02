@@ -19,9 +19,16 @@ spec:
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.1.21"
+              value: "v0.2.1"
             - name: GIN_MODE
               value: "release"
+            - name: REDIS_HOST
+              value: "redis.demo.svc.cluster.local:6379"
+            - name: REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: twfeel-secrets
+                  key: REDIS_PASS
             - name: ACCESS_TOKEN
               valueFrom:
                 secretKeyRef:

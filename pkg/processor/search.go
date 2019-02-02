@@ -131,6 +131,7 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 			return nil, err
 		}
 		resultTLL = time.Minute * time.Duration(i)
+		log.Printf("Setting cache to %v based on CACHE_TTL_MIN", resultTLL)
 	}
 
 	err = cache.Set(query, result, resultTLL)
