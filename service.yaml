@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: twfeel
   namespace: demo
+
 spec:
   runLatest:
     configuration:
@@ -10,13 +11,15 @@ spec:
         metadata:
           labels:
             demo: twfeel
+          annotations:
+            autoscaling.knative.dev/minScale: "1"
         spec:
           container:
             image: gcr.io/s9-demo/twfeel:latest
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.1.20"
+              value: "v0.1.21"
             - name: GIN_MODE
               value: "release"
             - name: ACCESS_TOKEN

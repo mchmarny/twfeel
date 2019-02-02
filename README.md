@@ -9,6 +9,8 @@ On-demand Twitter topic sentiment provider
 
 ### Knative
 
+See [how to](https://github.com/knative/docs/blob/master/install/README.md) on Knative site
+
 
 ### Chat Bot
 
