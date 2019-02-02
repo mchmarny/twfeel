@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	// "strings"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,9 +47,8 @@ func chatHandler(c *gin.Context) {
 	}
 
 	senderName := post.Message.Sender.DisplayName
-	queryText := post.Message.Text
+	queryText := strings.Trim(post.Message.ArgumentText, " ")
 	log.Printf("Query: %s", queryText)
-
 
 	// run query and score
 	result, err := search(c.Request.Context(), queryText)
@@ -63,22 +61,16 @@ func chatHandler(c *gin.Context) {
 		return
 	}
 
-
 	// format results
-	sentiment := "positive"
+	sentiment := ":)"
 	if result.Score < 0 {
-		sentiment = "negative"
+		sentiment = ":("
 	}
 
-	txt := "Hi %s, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is *%s* (magnitude: *%f*)%s"
-
-	rateLimitInfo := ""
-	if result.Score == 0 {
-		rateLimitInfo = " - Twitter rate-limited :("
-	}
+	txt := "Hi %s, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is *%s* (meta: magnitude of *%.2f*, score *%.2f* based on *%d* non-RT)"
 
 	rez := &Message{
-		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude, rateLimitInfo),
+		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude, result.Score, result.NonRT),
 	}
 
 	c.JSON(http.StatusOK, rez)
