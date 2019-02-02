@@ -21,7 +21,7 @@ In the Google API Console, enable the Hangouts Chat API by doing the following:
 Once the API is enabled, click the Configuration tab. In the Configuration pane, do the following:
 
 * In the Bot name field, enter 'YOUR_NAME'.
-* In the Avatar URL field, enter ''.
+* In the Avatar URL field, enter 'https://github.com/mchmarny/twfeel/raw/master/icon.png'.
 * In the Description field, enter 'Tweet sentimenter'.
 * Under Functionality, select Bot works in direct messages and room
 * Under Connection settings, select Bot URL and paste the URL for the Knative service
