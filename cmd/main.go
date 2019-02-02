@@ -1,13 +1,15 @@
-package main
+package cmd
 
 import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/http/httputil"
 	"os"
 
+	"github.com/mchmarny/twfeel/pkg/handler"
+
 	"github.com/gin-gonic/gin"
+
 )
 
 const (
@@ -17,7 +19,7 @@ const (
 
 func main() {
 
-	log.Print("Initializing twfeel API server...")
+	log.Print("Initializing API server...")
 
 	// router
 	r := gin.New()
@@ -27,8 +29,8 @@ func main() {
 	// api
 	v1 := r.Group("/v1")
 	{
-		v1.GET("/feel/:query", feelHandler)
-		v1.POST("/chat", chatHandler)
+		v1.GET("/feel/:query", handler.RestHandler)
+		v1.POST("/chat", handler.ChatHandler)
 	}
 
 	// root
@@ -50,22 +52,4 @@ func main() {
 
 func defaultHandler(c *gin.Context) {
 	c.String(http.StatusOK, "OK")
-}
-
-func withLog(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
-		w.Header().Set("Pragma", "no-cache")
-		w.Header().Set("Expires", "0")
-
-		reqDump, err := httputil.DumpRequest(r, true)
-		if err != nil {
-			log.Println(err)
-		} else {
-			log.Println(string(reqDump))
-		}
-
-		next.ServeHTTP(w, r)
-	}
 }

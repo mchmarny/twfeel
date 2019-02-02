@@ -1,9 +1,11 @@
-package main
+package handler
 
 import (
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/mchmarny/twfeel/pkg/processor"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,7 +14,8 @@ var (
 	knownToken = os.Getenv("ACCESS_TOKEN")
 )
 
-func feelHandler(c *gin.Context) {
+// RestHandler handles queries from the REST interface
+func RestHandler(c *gin.Context) {
 
 	token := c.Query("token")
 	if token != knownToken {
@@ -34,7 +37,7 @@ func feelHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := search(c.Request.Context(), query)
+	result, err := processor.Search(c.Request.Context(), query)
 	if err != nil {
 		log.Printf("error on search: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{

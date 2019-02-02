@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"fmt"
@@ -6,10 +6,17 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/mchmarny/twfeel/pkg/processor"
+
 	"github.com/gin-gonic/gin"
 )
 
-func chatHandler(c *gin.Context) {
+const (
+	magnitudeThreshold     = 0.2
+)
+
+// ChatHandler handles queries from chat service
+func ChatHandler(c *gin.Context) {
 
 	// request
 	post := Request{}
@@ -51,7 +58,7 @@ func chatHandler(c *gin.Context) {
 	log.Printf("Query: %s", queryText)
 
 	// run query and score
-	result, err := search(c.Request.Context(), queryText)
+	result, err := processor.Search(c.Request.Context(), queryText)
 	if err != nil {
 		log.Printf("error on search: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -61,6 +68,12 @@ func chatHandler(c *gin.Context) {
 		return
 	}
 
+	/*
+		Clearly Positive*	"score": 0.8, 	"magnitude": 3.0
+		Clearly Negative*	"score": -0.6, 	"magnitude": 4.0
+		Neutral				"score": 0.1, 	"magnitude": 0.0
+		Mixed				"score": 0.0, 	"magnitude": 4.0
+	*/
 
 	// format results
 	sentiment := ""

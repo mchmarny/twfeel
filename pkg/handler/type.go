@@ -1,4 +1,4 @@
-package main
+package handler
 
 // Request object
 type Request struct {

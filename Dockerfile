@@ -3,14 +3,18 @@ FROM golang:latest as build
 
 # copy
 WORKDIR /go/src/github.com/mchmarny/twfeel/
-COPY . .
+COPY . /src/
 
 # dependancies
+WORKDIR /src/
 ENV GO111MODULE=on
 RUN go mod download
 
 # build
-RUN CGO_ENABLED=0 go build -o /twfeel
+WORKDIR /src/cmd/
+RUN CGO_ENABLED=0 go build -v -o /twfeel
+
+
 
 # RUN STAGE
 FROM alpine as release
@@ -22,3 +26,5 @@ COPY --from=build /twfeel /app/
 # run
 WORKDIR /app/
 ENTRYPOINT ["./twfeel"]
+
+

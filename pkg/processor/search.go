@@ -1,4 +1,4 @@
-package main
+package processor
 
 import (
 	"context"
@@ -13,10 +13,6 @@ import (
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
 	"github.com/google/uuid"
-)
-
-const (
-	magnitudeThreshold     = 0.2
 )
 
 var (
@@ -41,12 +37,12 @@ type SentimentResult struct {
 	QueryOn   time.Time `json:"ts"`
 	Tweets    int     `json:"tweets"`
 	NonRT    int     `json:"nonRT"`
-	Sentiment int       `json:"sentiment"`
 	Score     float32    `json:"score"`
 	Magnitude float32    `json:"magnitude"`
 }
 
-func search(ctx context.Context, query string) (r *SentimentResult, err error) {
+// Search searches Twitter and scores results
+func Search(ctx context.Context, query string) (r *SentimentResult, err error) {
 
 	if consumerKey == "" || consumerSecret == "" || accessToken == "" || accessSecret == "" {
 		return nil, errors.New("Both, consumer key/secret and access token/secret are required")
@@ -115,24 +111,8 @@ func search(ctx context.Context, query string) (r *SentimentResult, err error) {
 	}
 
 	log.Printf("Score: %f, Magnitude: %f", result.Score,sentiment.Magnitude)
-
 	result.Magnitude = sentiment.Magnitude
 	result.Score = sentiment.Score
-
-	/*
-		Clearly Positive*	"score": 0.8, 	"magnitude": 3.0
-		Clearly Negative*	"score": -0.6, 	"magnitude": 4.0
-		Neutral				"score": 0.1, 	"magnitude": 0.0
-		Mixed				"score": 0.0, 	"magnitude": 4.0
-	*/
-
-	if result.Score > 0 && sentiment.Magnitude > magnitudeThreshold {
-		result.Sentiment = 1
-	} else if result.Score < 0 && sentiment.Magnitude > magnitudeThreshold {
-		result.Sentiment = -1
-	} else {
-		result.Sentiment = 0
-	}
 
 	return result, nil
 
