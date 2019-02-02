@@ -1,11 +1,4 @@
 
-setup:
-	export ACCESS_TOKEN=$(TW_FEEL_TOKEN)
-	export T_CONSUMER_KEY=$(T_CONSUMER_KEY)
-	export T_CONSUMER_SECRET=$(T_CONSUMER_SECRET)
-	export T_ACCESS_TOKEN=$(T_ACCESS_TOKEN)
-	export T_ACCESS_SECRET=$(T_ACCESS_SECRET)
-
 secret:
 	kubectl delete secret twfeel-secrets -n demo --ignore-not-found=true
 	kubectl create secret generic twfeel-secrets -n demo \
