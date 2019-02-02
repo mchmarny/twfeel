@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/mchmarny/twfeel/pkg/processor"
+	"github.com/mchmarny/twfeel/pkg/common"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +20,7 @@ const (
 func ChatHandler(c *gin.Context) {
 
 	// request
-	post := Request{}
+	post := common.Request{}
 	err := c.BindJSON(&post)
 	if err != nil {
 		log.Printf("invalid body content: %v", err)
@@ -68,6 +69,10 @@ func ChatHandler(c *gin.Context) {
 		return
 	}
 
+	if result == nil {
+		log.Fatal("BUG, result should never be nil")
+	}
+
 	/*
 		Clearly Positive*	"score": 0.8, 	"magnitude": 3.0
 		Clearly Negative*	"score": -0.6, 	"magnitude": 4.0
@@ -87,7 +92,7 @@ func ChatHandler(c *gin.Context) {
 
 	txt := "Hi <%s>, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s  -- meta: magnitude of *%.2f*, score *%.2f* based on *%d* non-RT"
 
-	rez := &Message{
+	rez := &common.Message{
 		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude, result.Score, result.NonRT),
 	}
 

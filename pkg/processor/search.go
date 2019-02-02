@@ -3,16 +3,19 @@ package processor
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"os"
 	"strings"
 	"time"
-   	"regexp"
+	"regexp"
+	"strconv"
+
+	"github.com/mchmarny/twfeel/pkg/common"
+	"github.com/mchmarny/twfeel/pkg/cache"
 
 	"github.com/dghubble/go-twitter/twitter"
 	"github.com/dghubble/oauth1"
-	"github.com/google/uuid"
+
 )
 
 var (
@@ -22,6 +25,10 @@ var (
 	accessToken = os.Getenv("T_ACCESS_TOKEN")
 	accessSecret = os.Getenv("T_ACCESS_SECRET")
 
+	// cache
+	cacheMin = os.Getenv("CACHE_TTL_MIN")
+	defaultCacheDuration = time.Minute * 5
+
 	// validation expressions
 	userReg = regexp.MustCompile(`@[\w]*`)
 	nonCharReg = regexp.MustCompile(`[^a-zA-Z#]`)
@@ -30,22 +37,23 @@ var (
 	newLineReg = regexp.MustCompile(`^[\r\n]+|\.|[\r\n]+$`)
 )
 
-// SentimentResult represents results of the job
-type SentimentResult struct {
-	ID        string    `json:"id"`
-	Query        string    `json:"query"`
-	QueryOn   time.Time `json:"ts"`
-	Tweets    int     `json:"tweets"`
-	NonRT    int     `json:"nonRT"`
-	Score     float32    `json:"score"`
-	Magnitude float32    `json:"magnitude"`
-}
-
 // Search searches Twitter and scores results
-func Search(ctx context.Context, query string) (r *SentimentResult, err error) {
+func Search(ctx context.Context, query string) (r *common.SentimentResult, err error) {
 
 	if consumerKey == "" || consumerSecret == "" || accessToken == "" || accessSecret == "" {
 		return nil, errors.New("Both, consumer key/secret and access token/secret are required")
+	}
+
+	// check cache
+	cr, err := cache.Get(query)
+	if err != nil {
+		log.Printf("Error quering cache: %v", err)
+		return nil, err
+	}
+
+	if cr != nil {
+		log.Printf("Cache hit on `%s`", query)
+		return cr, nil
 	}
 
 	// init convif
@@ -75,8 +83,8 @@ func Search(ctx context.Context, query string) (r *SentimentResult, err error) {
 	}
 
 	// results
-	result := &SentimentResult{
-		ID:      newID(),
+	result := &common.SentimentResult{
+		ID:      common.NewID(),
 		Query:   query,
 		QueryOn: time.Now(),
 		Tweets:  len(search.Statuses),
@@ -92,7 +100,7 @@ func Search(ctx context.Context, query string) (r *SentimentResult, err error) {
 		}
 	}
 
-	// join
+	// update after filter
 	result.NonRT = len(contents)
 
 	// cleanup
@@ -114,14 +122,22 @@ func Search(ctx context.Context, query string) (r *SentimentResult, err error) {
 	result.Magnitude = sentiment.Magnitude
 	result.Score = sentiment.Score
 
+	// set the cache
+	resultTLL := defaultCacheDuration
+	if cacheMin != "" {
+		i, err := strconv.Atoi(cacheMin)
+		if err != nil {
+			log.Printf("CACHE_TTL_MIN set to invalid value (must be int): %v", err)
+			return nil, err
+		}
+		resultTLL = time.Minute * time.Duration(i)
+	}
+
+	err = cache.Set(query, result, resultTLL)
+	if err != nil {
+		log.Fatalf("BUG: Error while setting cache: %v", err)
+	}
+
 	return result, nil
 
-}
-
-func newID() string {
-	id, err := uuid.NewUUID()
-	if err != nil {
-		log.Fatalf("Error while getting id: %v\n", err)
-	}
-	return fmt.Sprintf("qid-%s", id.String())
 }
