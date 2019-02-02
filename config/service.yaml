@@ -19,11 +19,13 @@ spec:
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.2.4"
+              value: "v0.2.5"
             - name: GIN_MODE
               value: "release"
             - name: REDIS_HOST
               value: "redis.demo.svc.cluster.local:6379"
+            - name: CACHE_TTL_MIN
+              value: "5"
             - name: REDIS_PASS
               valueFrom:
                 secretKeyRef:

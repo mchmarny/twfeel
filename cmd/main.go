@@ -33,8 +33,9 @@ func main() {
 		v1.POST("/chat", handler.ChatHandler)
 	}
 
-	// root
+	// root & health
 	r.GET("/", defaultHandler)
+	r.GET("/health", defaultHandler)
 
 	// port
 	port := os.Getenv(portVariableName)

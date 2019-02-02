@@ -1,4 +1,4 @@
-.PHONY: all test secret image query update run
+.PHONY: all test secret image query deps run service-new
 
 
 test:
@@ -28,20 +28,23 @@ docker:
 service:
 	kubectl apply -f config/service.yaml
 
+service-new:
+	kubectl delete -f config/service.yaml
+	kubectl apply -f config/service.yaml
+
 query:
 	curl -H "Content-Type: application/json" -X GET \
-		"https://twfeel.demo.knative.tech/v1/feel/knative?token=${TOKEN}" \
+		"https://twfeel.demo.knative.tech/v1/feel/knative?token=${TW_FEEL_TOKEN}" \
 		| jq "."
 
-update:
-	go get -u github.com/gin-gonic/gin
+deps:
 	go get -u cloud.google.com/go
 	go get -u github.com/dghubble/go-twitter
 	go get -u github.com/dghubble/oauth1
 	go get -u github.com/gin-gonic/gin
-	go get -u github.com/go-redis/redis
 	go get -u github.com/go-redis/cache
+	go get -u github.com/go-redis/redis
 	go get -u github.com/google/uuid
 	go get -u github.com/stretchr/testify
+	go get -u github.com/vmihailenco/msgpack
 	go mod tidy
-	go mod vendor
