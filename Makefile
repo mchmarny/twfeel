@@ -5,7 +5,7 @@ test:
 	go test ./... -v
 
 run:
-	go run cmd/*.go
+	go run ./cmd/*.go
 
 secret:
 	kubectl delete secret twfeel-secrets -n demo --ignore-not-found=true
@@ -21,6 +21,9 @@ image:
 	gcloud builds submit \
 		--project ${GCP_PROJECT} \
 		--tag gcr.io/${GCP_PROJECT}/twfeel:latest
+
+docker:
+	docker build -t twfeel .
 
 service:
 	kubectl apply -f config/service.yaml

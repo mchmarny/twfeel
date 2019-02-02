@@ -15,16 +15,14 @@ WORKDIR /src/cmd/
 RUN CGO_ENABLED=0 go build -v -o /twfeel
 
 
-
 # RUN STAGE
 FROM alpine as release
 RUN apk add --no-cache ca-certificates
 
 # app executable
-COPY --from=build /twfeel /app/
+COPY --from=build /twfeel /app/twfeel
 
 # run
 WORKDIR /app/
 ENTRYPOINT ["./twfeel"]
-
 

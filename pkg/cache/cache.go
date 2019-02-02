@@ -100,6 +100,10 @@ func Get(key string) (rez *common.SentimentResult, err error) {
 		return nil, nil
 	}
 
+	if sr.ID == "" {
+		return nil, nil
+	}
+
 	return &sr, nil
 
 }

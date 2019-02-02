@@ -11,6 +11,7 @@ require (
 	github.com/go-redis/cache v6.3.5+incompatible
 	github.com/go-redis/redis v6.15.1+incompatible
 	github.com/google/uuid v1.1.0
+	github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -18,14 +19,10 @@ require (
 	github.com/onsi/ginkgo v1.7.0 // indirect
 	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/stretchr/testify v1.3.0
-	github.com/ugorji/go/codec v0.0.0-20190126102652-8fd0f8d918c8 // indirect
+	github.com/ugorji/go/codec v0.0.0-20190128213124-ee1426cffec0 // indirect
 	github.com/vmihailenco/msgpack v4.0.2+incompatible
-	go.opencensus.io v0.19.0 // indirect
-	golang.org/x/net v0.0.0-20190125091013-d26f9f9a57f3 // indirect
-	golang.org/x/oauth2 v0.0.0-20190130055435-99b60b757ec1 // indirect
-	golang.org/x/sys v0.0.0-20190201152629-afcc84fd7533 // indirect
+	golang.org/x/arch v0.0.0-20181203225421-5a4828bb7045 // indirect
 	google.golang.org/genproto v0.0.0-20190201180003-4b09977fb922
-	google.golang.org/grpc v1.18.0 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 )
