@@ -79,11 +79,11 @@ func Handler(c *gin.Context) {
 	sentiment := ""
 	switch result.Sentiment {
 		case common.NegativeSentiment:
-			sentiment = "`:(` negative"
+			sentiment = ":disappointed:"
 		case common.PositiveSentiment:
-			sentiment = "`:)` *positive*"
+			sentiment = ":smile:"
 		default:
-			sentiment = "`:|` *meh*"
+			sentiment = ":neutral_face:"
 	}
 
 	a1 := Attachment{}
@@ -91,15 +91,14 @@ func Handler(c *gin.Context) {
 		&Field{
 			Title: "Sentiment",
 			Value: fmt.Sprintf(
-				"I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s",
+				"Based on analyses of last *%d* tweets the general sentiment about `%s` is %s",
 				result.Tweets, queryText, sentiment),
 		},
 
 		&Field{
 			Title: "Context",
-			Value: fmt.Sprintf(
-				"score *%.2f*, magnitude *%.2f*",
-				result.Score, result.Magnitude),
+			Value: fmt.Sprintf("Score *%.2f*, Magnitude *%.2f*, Sentiment %s",
+			result.Score, result.Magnitude, result.Sentiment.String()),
 		},
 	}
 
@@ -115,7 +114,7 @@ func Handler(c *gin.Context) {
 	}
 
     pl := &Payload{
-      Text: fmt.Sprintf("Hi %s, here is the info you requested from <https://github.com/mchmarny/twfeel|twfeel>...", post.UserName),
+      Text: fmt.Sprintf("%s, here is the info you requested from <https://github.com/mchmarny/twfeel|twfeel>...", post.UserName),
       Username: "robot",
       Channel: "#general",
       IconEmoji: ":knative:",
