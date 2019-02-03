@@ -42,7 +42,21 @@ For information on how to install [Knative](https://knative.dev) see [how to](ht
 
 ### Deploy Service
 
-First you will need to obtain Twitter API keys.
+First you will need to obtain Twitter API keys and create secrets
+
+```shell
+kubectl create secret generic twfeel-secrets -n demo \
+	--from-literal=ACCESS_TOKEN=${TW_FEEL_TOKEN} \
+	--from-literal=REDIS_PASS=${REDIS_PASS} \
+	--from-literal=T_CONSUMER_KEY=${TK_CONSUMER_KEY} \
+	--from-literal=T_CONSUMER_SECRET=${TK_CONSUMER_SECRET} \
+	--from-literal=T_ACCESS_TOKEN=${TK_ACCESS_TOKEN} \
+	--from-literal=T_ACCESS_SECRET=${TK_ACCESS_SECRET}
+```
+
+> Note, if you changed any of the variable above, you will need to edit the Knative service manifest in `config/service.yaml`
+
+Then deploy the service
 
 
 ```shell
