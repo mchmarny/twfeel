@@ -45,11 +45,12 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 	cr, err := cache.Get(query)
 	if err != nil {
 		log.Printf("Error quering cache: %v", err)
-		return nil, err
 	}
 
-	if cr != nil {
+	if cr != nil && cr.IsValidState() {
 		log.Printf("Cache hit on `%s`", query)
+		// TODO: refactor this to allow cached objects to persist sentiment
+		cr.CalculateSentiment()
 		return cr, nil
 	}
 
@@ -107,6 +108,7 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 	log.Printf("Score: %f, Magnitude: %f", result.Score, sentiment.Magnitude)
 	result.Magnitude = sentiment.Magnitude
 	result.Score = sentiment.Score
+
 	// after the score and magnitude are set, calc sentiment
 	result.CalculateSentiment()
 

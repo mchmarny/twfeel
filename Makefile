@@ -4,6 +4,15 @@
 test:
 	go test ./...
 
+test-slack:
+	go test --run TestSlackHandler ./pkg/handler/slack/ -v
+
+test-rest:
+	go test --run TestRestHandler ./pkg/handler/rest/ -v
+
+test-chat:
+	go test --run TestChatHandler ./pkg/handler/chat/ -v
+
 run:
 	go run ./cmd/*.go
 
@@ -36,6 +45,9 @@ query:
 	curl -H "Content-Type: application/json" -X GET \
 		"https://twfeel.demo.knative.tech/v1/feel/knative?token=${TW_FEEL_TOKEN}" \
 		| jq "."
+
+redis-connect:
+	kubectl exec -it redis-0 -n demo /bin/sh
 
 deps:
 	go get -u cloud.google.com/go

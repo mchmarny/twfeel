@@ -97,8 +97,8 @@ func Handler(c *gin.Context) {
 
 		&Field{
 			Title: "Context",
-			Value: fmt.Sprintf("Score *%.2f*, Magnitude *%.2f*, Sentiment %s",
-			result.Score, result.Magnitude, result.Sentiment.String()),
+			Value: fmt.Sprintf("Score *%.2f*, Magnitude *%.2f*, Sentiment *%s*",
+			result.Score, result.Magnitude, result.Sentiment),
 		},
 	}
 

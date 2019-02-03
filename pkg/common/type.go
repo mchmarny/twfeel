@@ -8,56 +8,33 @@ const (
 	magnitudeThreshold = 0.2
 
 	// UndefinedSentiment is not set
-	UndefinedSentiment SentimentMeasure = 0
+	UndefinedSentiment = "Undefined"
 	// PositiveSentiment is good
-	PositiveSentiment SentimentMeasure = 1
+	PositiveSentiment = "Positive"
 	// NegativeSentiment is bad
-	NegativeSentiment SentimentMeasure = 3
+	NegativeSentiment = "Negative"
 	// MixedSentiment is meh
-	MixedSentiment SentimentMeasure = 4
+	MixedSentiment = "Mixed"
 )
-
-// SentimentMeasure defines the feeling on topic
-type SentimentMeasure int
-
-func (s SentimentMeasure) String() string {
-	names := [...]string{
-		"UndefinedSentiment",
-		"PositiveSentiment",
-		"NegativeSentiment",
-		"MixedSentiment",
-	}
-
-	if s < PositiveSentiment || s > MixedSentiment {
-		return "UndefinedSentiment"
-	}
-
-	return names[s]
-}
-
-// IsPositive is a shortcut
-func (s SentimentMeasure) IsPositive() bool {
-	return s == PositiveSentiment
-}
-
-// IsNegative is a shortcut
-func (s SentimentMeasure) IsNegative() bool {
-	return s == NegativeSentiment
-}
 
 // SentimentResult represents results of the job
 type SentimentResult struct {
-	ID        string           `json:"id"`
-	Query     string           `json:"query"`
-	QueryOn   time.Time        `json:"ts"`
-	Tweets    int              `json:"tweets"`
-	Score     float32          `json:"score"`
-	Magnitude float32          `json:"magnitude"`
-	Sentiment SentimentMeasure `json:"sentiment"`
+	ID        string    `json:"id"`
+	Query     string    `json:"query"`
+	QueryOn   time.Time `json:"ts"`
+	Tweets    int       `json:"tweets"`
+	Score     float32   `json:"score"`
+	Magnitude float32   `json:"magnitude"`
+	Sentiment string    `json:"sentiment"`
+}
+
+// IsValidState checks if the result was populated
+func (s *SentimentResult) IsValidState() bool {
+	return s.ID != "" && s.Query != "" && s.Sentiment != UndefinedSentiment
 }
 
 // CalculateSentiment derives sentiment
-func (s *SentimentResult) CalculateSentiment() SentimentMeasure {
+func (s *SentimentResult) CalculateSentiment() string {
 	if s.Score > 0.2 && s.Magnitude > magnitudeThreshold {
 		s.Sentiment = PositiveSentiment
 	} else if s.Score < -0.2 && s.Magnitude > magnitudeThreshold {
