@@ -15,6 +15,8 @@ const (
 	NegativeSentiment = "Negative"
 	// MixedSentiment is meh
 	MixedSentiment = "Mixed"
+	// NeutralSentiment is just that
+	NeutralSentiment = "Neutral"
 )
 
 // SentimentResult represents results of the job
@@ -39,8 +41,10 @@ func (s *SentimentResult) CalculateSentiment() string {
 		s.Sentiment = PositiveSentiment
 	} else if s.Score < -0.2 && s.Magnitude > magnitudeThreshold {
 		s.Sentiment = NegativeSentiment
-	} else {
+	} else if (s.Score > -0.2 && s.Score < 0.2) && s.Magnitude > 2.0 {
 		s.Sentiment = MixedSentiment
+	} else {
+		s.Sentiment = NeutralSentiment
 	}
 	return s.Sentiment
 }

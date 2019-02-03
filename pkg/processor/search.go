@@ -91,7 +91,7 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 	contents := make([]string, 0)
 	log.Printf("Found: %d", result.Tweets)
 	for _, tweet := range search.Statuses {
-		//log.Printf("Raw: %s", tweet.Text)
+		// log.Printf("Raw: %s", tweet.Text)
 		contents = append(contents, tweet.Text)
 	}
 
