@@ -19,7 +19,6 @@ func TestCache(t *testing.T) {
 	r1 := &common.SentimentResult{
 		ID: common.NewID(),
 		Magnitude: 0.12,
-		NonRT: 3,
 		Query: "test",
 		QueryOn: time.Now(),
 		Score: 1.23,

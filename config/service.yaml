@@ -19,7 +19,7 @@ spec:
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.2.5"
+              value: "v0.2.6"
             - name: GIN_MODE
               value: "release"
             - name: REDIS_HOST

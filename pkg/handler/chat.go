@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"log"
+	"time"
 	"net/http"
 	"strings"
 
@@ -90,11 +91,10 @@ func ChatHandler(c *gin.Context) {
 		sentiment = "`:|` *meh*"
 	}
 
-	txt := "Hi <%s>, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s  -- meta: magnitude of *%.2f*, score *%.2f* based on *%d* non-RT"
+	txt := "Hi <%s>, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s  -- meta: score *%.2f*, magnitude *%.2f* <https://twitter.com/search?q=%s+-filter:retweets+until:%s|query>"
+	txt =  fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Score, result.Magnitude, queryText, time.Now().Format("2006-01-02"))
 
-	rez := &common.Message{
-		Text: fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Magnitude, result.Score, result.NonRT),
-	}
+	rez := &common.Message{Text: txt}
 
 	c.JSON(http.StatusOK, rez)
 

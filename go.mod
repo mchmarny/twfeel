@@ -1,23 +1,25 @@
 module github.com/mchmarny/twfeel
 
 require (
-	cloud.google.com/go v0.35.1 // indirect
+	cloud.google.com/go v0.35.1
 	dmitri.shuralyov.com/app/changes v0.0.0-20181114035150-5af16e21babb // indirect
 	dmitri.shuralyov.com/service/change v0.0.0-20190130035545-6cc139383561 // indirect
 	git.apache.org/thrift.git v0.12.0 // indirect
 	github.com/Shopify/sarama v1.20.1 // indirect
+	github.com/cenkalti/backoff v2.1.1+incompatible // indirect
 	github.com/coreos/go-systemd v0.0.0-20181031085051-9002847aa142 // indirect
-	github.com/dghubble/go-twitter v0.0.0-20190108053744-7fd79e2bcc65 // indirect
-	github.com/dghubble/oauth1 v0.5.0 // indirect
+	github.com/dghubble/go-twitter v0.0.0-20190108053744-7fd79e2bcc65
+	github.com/dghubble/oauth1 v0.5.0
+	github.com/dghubble/sling v1.2.0 // indirect
 	github.com/gin-contrib/sse v0.0.0-20190125020943-a7658810eb74 // indirect
-	github.com/gin-gonic/gin v1.3.0 // indirect
+	github.com/gin-gonic/gin v1.3.0
 	github.com/go-logfmt/logfmt v0.4.0 // indirect
-	github.com/go-redis/cache v6.3.5+incompatible // indirect
-	github.com/go-redis/redis v6.15.1+incompatible // indirect
+	github.com/go-redis/cache v6.3.5+incompatible
+	github.com/go-redis/redis v6.15.1+incompatible
 	github.com/gogo/protobuf v1.2.0 // indirect
 	github.com/golang/lint v0.0.0-20181217174547-8f45f776aaf1 // indirect
 	github.com/google/pprof v0.0.0-20190109223431-e84dfd68c163 // indirect
-	github.com/google/uuid v1.1.0 // indirect
+	github.com/google/uuid v1.1.0
 	github.com/googleapis/gax-go v2.0.2+incompatible // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20181103185306-d547d1d9531e // indirect
 	github.com/gorilla/mux v1.7.0 // indirect
@@ -46,9 +48,9 @@ require (
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/shurcooL/webdavfs v0.0.0-20181215192745-5988b2d638f6 // indirect
 	github.com/sirupsen/logrus v1.3.0 // indirect
-	github.com/stretchr/testify v1.3.0 // indirect
+	github.com/stretchr/testify v1.3.0
 	github.com/ugorji/go/codec v0.0.0-20190128213124-ee1426cffec0 // indirect
-	github.com/vmihailenco/msgpack v4.0.2+incompatible // indirect
+	github.com/vmihailenco/msgpack v4.0.2+incompatible
 	go.opencensus.io v0.19.0 // indirect
 	go4.org v0.0.0-20181109185143-00e24f1b2599 // indirect
 	golang.org/x/build v0.0.0-20190201181641-63986c177d1f // indirect
@@ -59,7 +61,7 @@ require (
 	golang.org/x/perf v0.0.0-20190124201629-844a5f5b46f4 // indirect
 	golang.org/x/sys v0.0.0-20190201152629-afcc84fd7533 // indirect
 	golang.org/x/tools v0.0.0-20190202202610-718ddee9569a // indirect
-	google.golang.org/genproto v0.0.0-20190201180003-4b09977fb922 // indirect
+	google.golang.org/genproto v0.0.0-20190201180003-4b09977fb922
 	google.golang.org/grpc v1.18.0 // indirect
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
 	honnef.co/go/tools v0.0.0-20190128043916-71123fcbb8fe // indirect

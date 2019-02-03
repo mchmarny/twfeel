@@ -1,15 +1,53 @@
-# twfeel
+# twfeel - the on-demand topic sentiment provider
 
-On-demand Twitter topic sentiment provider
+> WIP: Twitter is currently only data source provider
 
-## Demo (WIP)
+## Demo
 
-* Deploy service to Knative cluster
-* Configure chat bot
+`twfeel` can be demoed using either:
 
-### Knative
+* REST Service
+* Hangouts Chat
 
-See [how to](https://github.com/knative/docs/blob/master/install/README.md) on Knative site
+### REST Service
+
+> Note, you will have to obtain the know invocator token (`token`) to execute this query either in browser or from command line
+
+```shell
+curl -H "Content-Type: application/json" -X GET \
+		"https://twfeel.demo.knative.tech/v1/feel/knative?token=${TW_FEEL_TOKEN}" \
+		| jq "."
+```
+
+### Hangouts Chat
+
+![demo](./img/demo.png "twfeel in Hangouts Chat")
+
+Assuming the `@tfeel` bot has already been configured, you can use it either in direct messages (`DM`) by typing the name of topic
+
+```shell
+knative
+```
+
+or invite it to any chat room and ask the bot in your message
+
+```shell
+@tfeel knative
+```
+
+
+## Setup
+
+For information on how to install [Knative](https://knative.dev) see [how to](https://github.com/knative/docs/blob/master/install/README.md) on Knative site
+
+### Deploy Service
+
+First you will need to obtain Twitter API keys.
+
+
+```shell
+kubectl apply -f config/service.yaml
+```
 
 
 ### Chat Bot
