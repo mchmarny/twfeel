@@ -25,7 +25,10 @@ func TestCache(t *testing.T) {
 		Tweets: 100,
 	}
 
-	err := Set(r1.ID, r1, time.Minute)
+	err := Clear(r1.ID)
+	assert.NoErrorf(t, err, "Error on Clear: %v", err)
+
+	err = Set(r1.ID, r1)
 	assert.NoErrorf(t, err, "Error on Set: %v", err)
 
 	r2, err := Get(r1.ID)

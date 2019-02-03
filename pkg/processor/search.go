@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 	"regexp"
-	"strconv"
 
 	"github.com/mchmarny/twfeel/pkg/common"
 	"github.com/mchmarny/twfeel/pkg/cache"
@@ -26,16 +25,13 @@ var (
 	accessToken = os.Getenv("T_ACCESS_TOKEN")
 	accessSecret = os.Getenv("T_ACCESS_SECRET")
 
-	// cache
-	cacheMin = os.Getenv("CACHE_TTL_MIN")
-	defaultCacheDuration = time.Minute * 5
-
 	// validation expressions
 	userReg = regexp.MustCompile(`@[\w]*`)
-	nonCharReg = regexp.MustCompile(`[^a-zA-Z#]`)
+	nonWordReg = regexp.MustCompile(`[^a-zA-Z#]`)
 	shortReg = regexp.MustCompile(`\b[a-z]{1,2}\b`)
-	uriREg = regexp.MustCompile(`http[s]?\:\/\/.[a-zA-Z0-9\.\/\-]+`)
-	newLineReg = regexp.MustCompile(`^[\r\n]+|\.|[\r\n]+$`)
+	uriReg = regexp.MustCompile(`http[s]?\:\/\/.[a-zA-Z0-9\.\/\-]+`)
+	emailReg = regexp.MustCompile(`\S*@\S*\s?`)
+	spaceReg = regexp.MustCompile(`\s+`)
 )
 
 // Search searches Twitter and scores results
@@ -77,7 +73,7 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 		ResultType: "recent",
 	}
 
-	log.Printf("Search: %v", query)
+	log.Printf("Searching: %v", query)
 	search, _, err := client.Search.Tweets(searchArgs)
 	if err != nil {
 		return nil, err
@@ -98,13 +94,8 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 		contents = append(contents, tweet.Text)
 	}
 
-	// cleanup
-	txt := strings.Join(contents, ". ")
-	txt = userReg.ReplaceAllString(txt, " ")
-	txt = uriREg.ReplaceAllString(txt, " ")
-	txt = nonCharReg.ReplaceAllString(txt, " ")
-	txt = shortReg.ReplaceAllString(txt, " ")
-	txt = newLineReg.ReplaceAllString(txt, " ")
+	// clean
+	txt := toCleanString(contents)
 
 	// log.Printf("Text: %s", txt)
 	sentiment, err := scoreSentiment(ctx, txt)
@@ -113,28 +104,48 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 		return result, nil
 	}
 
-	log.Printf("Score: %f, Magnitude: %f", result.Score,sentiment.Magnitude)
+	log.Printf("Score: %f, Magnitude: %f", result.Score, sentiment.Magnitude)
 	result.Magnitude = sentiment.Magnitude
 	result.Score = sentiment.Score
+	// after the score and magnitude are set, calc sentiment
 	result.CalculateSentiment()
 
 	// set the cache
-	resultTLL := defaultCacheDuration
-	if cacheMin != "" {
-		i, err := strconv.Atoi(cacheMin)
-		if err != nil {
-			log.Printf("CACHE_TTL_MIN set to invalid value (must be int): %v", err)
-			return nil, err
-		}
-		resultTLL = time.Minute * time.Duration(i)
-		log.Printf("Setting cache to %v based on CACHE_TTL_MIN", resultTLL)
-	}
-
-	err = cache.Set(query, result, resultTLL)
+	err = cache.Set(query, result)
 	if err != nil {
 		log.Fatalf("BUG: Error while setting cache: %v", err)
 	}
 
 	return result, nil
+
+}
+
+func toCleanString(contents []string) string {
+
+	txt := strings.Join(contents, ". ")
+
+	txt = strings.ToLower(txt)
+
+	// remove email addresses
+	txt = emailReg.ReplaceAllString(txt, " ")
+
+	// remove @usernames
+	txt = userReg.ReplaceAllString(txt, " ")
+
+	// remove URLs
+	txt = uriReg.ReplaceAllString(txt, " ")
+
+	// remove non-words
+	txt = nonWordReg.ReplaceAllString(txt, " ")
+
+	// remove short words (<3 char)
+	txt = shortReg.ReplaceAllString(txt, " ")
+
+	// space
+	txt = spaceReg.ReplaceAllString(txt, " ")
+
+	txt = strings.Trim(txt, " ")
+
+	return txt
 
 }

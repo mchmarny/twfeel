@@ -2,14 +2,15 @@ package slack
 
 // Request object
 type Request struct {
-	Token       string `json:"token"`
-	Domain      string `json:"team_domain"`
-	Channel     string `json:"channel_name"`
-	UserID      string `json:"user_id"`
-	UserName    string `json:"user_name"`
-	Command     string `json:"command"`
-	Query       string `json:"text"`
-	ResponseURL string `json:"response_url"`
+	Token       string `form:"token"`
+	Domain      string `form:"team_domain"`
+	ChannelID   string `form:"channel_id"`
+	ChannelName string `form:"channel_name"`
+	UserID      string `form:"user_id"`
+	UserName    string `form:"user_name"`
+	Command     string `form:"command"`
+	Query       string `form:"text"`
+	ResponseURL string `form:"response_url"`
 }
 
 // Field object

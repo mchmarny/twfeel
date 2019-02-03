@@ -33,7 +33,7 @@ func main() {
 	{
 		v1.GET("/feel/:query", rest.Handler)
 		v1.POST("/chat", chat.Handler)
-		v1.POST("/chat", slack.Handler)
+		v1.POST("/slack", slack.Handler)
 	}
 
 	// root & health

@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"time"
+	"strconv"
 
 	b64 "encoding/base64"
 
@@ -23,9 +24,26 @@ const (
 
 var (
 	codec *cache.Codec
+
+	defaultCacheDurationMin = 5
+	cacheDuration = time.Minute * time.Duration(defaultCacheDurationMin)
+
 )
 
 func init() {
+
+	cacheMin := os.Getenv("CACHE_TTL_MIN")
+	if cacheMin != "" {
+		i, err := strconv.Atoi(cacheMin)
+		if err != nil {
+			log.Printf(
+				"Error: CACHE_TTL_MIN set to invalid value (want int): %v. Using default (%d min)",
+				err, defaultCacheDurationMin)
+		} else {
+			cacheDuration = time.Minute * time.Duration(i)
+			log.Printf("Cache set to %v based on CACHE_TTL_MIN", cacheDuration)
+		}
+	}
 
 	host := os.Getenv(redisHostToken)
 	if host == "" {
@@ -68,8 +86,25 @@ func toKey(val string) string {
 		b64.StdEncoding.EncodeToString([]byte(val)))
 }
 
+// Clear clears cache for specific key
+func Clear(key string) error {
+
+	if key == "" {
+		return fmt.Errorf("Nil key")
+	}
+
+	k := toKey(key)
+
+	if !codec.Exists(k){
+		return nil
+	}
+
+	return codec.Delete(toKey(key))
+
+}
+
 // Set sets the result cache
-func Set(key string, rez *common.SentimentResult, ttl time.Duration) error {
+func Set(key string, rez *common.SentimentResult) error {
 
 	if key == "" {
 		return fmt.Errorf("Nil key")
@@ -82,7 +117,7 @@ func Set(key string, rez *common.SentimentResult, ttl time.Duration) error {
 	return codec.Set(&cache.Item{
 		Key:        toKey(key),
 		Object:     rez,
-		Expiration: ttl,
+		Expiration: cacheDuration,
 	})
 }
 
@@ -93,11 +128,17 @@ func Get(key string) (rez *common.SentimentResult, err error) {
 		return nil, fmt.Errorf("Nil key")
 	}
 
-	var sr common.SentimentResult
-	e := codec.Get(toKey(key), &sr)
+	k := toKey(key)
 
-	if e == redis.Nil {
+	if !codec.Exists(k){
 		return nil, nil
+	}
+
+	var sr common.SentimentResult
+	e := codec.Get(k, &sr)
+
+	if e != nil {
+		return nil, e
 	}
 
 	if sr.ID == "" {

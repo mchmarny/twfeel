@@ -13,10 +13,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	tokenKey = "slack"
+)
+
 // Handler handles queries from chat service
 func Handler(c *gin.Context) {
 
 	// request
+	log.Printf("RequestURI: %v", c.Request.URL.Query())
 	post := Request{}
 	err := c.BindQuery(&post)
 	if err != nil {
@@ -28,13 +33,24 @@ func Handler(c *gin.Context) {
 		return
 	}
 
+	log.Printf("Request: %v", post)
+
+	if post.Token == "" || post.Query == "" {
+		log.Println("invalid request")
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid request",
+			"status":  http.StatusBadRequest,
+		})
+		return
+	}
+
 	log.Printf("Token: %s", post.Token)
 	log.Printf("Domain: %s", post.Domain)
-	log.Printf("Channel: %s", post.Channel)
+	log.Printf("ChannelName: %s", post.ChannelName)
 	log.Printf("UserName: %s", post.UserName)
 
 	// token
-	if !common.IsValidAccessToken(post.Token) {
+	if !common.IsValidAccessToken(tokenKey, post.Token) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid access token",
 			"status":  http.StatusBadRequest,

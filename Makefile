@@ -2,7 +2,7 @@
 
 
 test:
-	go test ./... -v
+	go test ./...
 
 run:
 	go run ./cmd/*.go
@@ -10,7 +10,7 @@ run:
 secret:
 	kubectl delete secret twfeel-secrets -n demo --ignore-not-found=true
 	kubectl create secret generic twfeel-secrets -n demo \
-		--from-literal=ACCESS_TOKEN=$(TW_FEEL_TOKEN) \
+		--from-literal=ACCESS_TOKENS="rest:${TW_FEEL_REST_TOKEN};chat:${TW_FEEL_CHAT_TOKEN};slack:${TW_FEEL_SLACK_TOKEN}" \
 		--from-literal=REDIS_PASS=$(REDIS_PASS) \
 		--from-literal=T_CONSUMER_KEY=$(TK_CONSUMER_KEY) \
 		--from-literal=T_CONSUMER_SECRET=$(TK_CONSUMER_SECRET) \

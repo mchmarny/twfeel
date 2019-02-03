@@ -1,4 +1,4 @@
-package slack
+package rest
 
 import (
 	"net/http"
@@ -12,15 +12,15 @@ import (
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	r.POST("/slack", Handler)
+	r.GET("/feel/:query", Handler)
 	return r
 }
 
-func TestSlackHandler(t *testing.T) {
-	url := "/slack?token=1234&team_domain=knative&channel_id=C2147483705&channel_name=test&user_id=U2147483697&user_name=Steve&command=/tfeel&text=knative"
+func TestRestHandler(t *testing.T) {
+	url := "/feel/knative?token=1234"
 	router := setupRouter()
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", url, nil)
+	req, _ := http.NewRequest("GET", url, nil)
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 200, w.Code)
 	log.Printf(w.Body.String())

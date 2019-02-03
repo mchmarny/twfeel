@@ -13,6 +13,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	tokenKey = "chat"
+)
+
 // Handler handles queries from chat service
 func Handler(c *gin.Context) {
 
@@ -33,13 +37,15 @@ func Handler(c *gin.Context) {
 	log.Printf("Token: %s", post.Token)
 
 	// token
-	if !common.IsValidAccessToken(post.Token) {
+	if !common.IsValidAccessToken(tokenKey, post.Token) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid access token",
 			"status":  http.StatusBadRequest,
 		})
 		return
 	}
+
+	log.Printf("Request: %v", post)
 
 	if post.Message == nil || post.Message.Sender == nil {
 		log.Println("invalid request")

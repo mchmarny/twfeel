@@ -10,11 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const (
+	tokenKey = "rest"
+)
+
 // Handler handles queries from the REST interface
 func Handler(c *gin.Context) {
 
 	// token
-	if !common.IsValidAccessToken(c.Query("token")) {
+	if !common.IsValidAccessToken(tokenKey, c.Query("token")) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid access token",
 			"status":  http.StatusBadRequest,

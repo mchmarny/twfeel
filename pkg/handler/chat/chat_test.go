@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func setupChatRouter() *gin.Engine {
+func setupRouter() *gin.Engine {
 	r := gin.Default()
 	r.POST("/chat", Handler)
 	return r
@@ -26,7 +26,7 @@ func TestChatHandler(t *testing.T) {
 		return
 	}
 
-	router := setupChatRouter()
+	router := setupRouter()
 
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("POST", "/chat", bytes.NewReader(raw))
