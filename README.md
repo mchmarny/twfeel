@@ -35,6 +35,16 @@ or invite it to any chat room and ask the bot in your message
 @tfeel knative
 ```
 
+### Slack
+
+![demo](./img/slack.png "twfeel in Slack")
+
+Assuming the `@kfeel` app has already been added to your Slack instance, you can use it like this
+
+```shell
+/kfeel knative
+```
+
 
 ## Setup
 
