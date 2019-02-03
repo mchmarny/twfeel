@@ -20,7 +20,7 @@ func setupChatRouter() *gin.Engine {
 
 func TestChatHandler(t *testing.T) {
 
-	raw, err := ioutil.ReadFile("../../samples/request.json")
+	raw, err := ioutil.ReadFile("../../sample/request.json")
     if err != nil {
 		t.Error(raw)
 		return
