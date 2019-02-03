@@ -19,7 +19,7 @@ spec:
             imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.2.8"
+              value: "v0.3.4"
             - name: GIN_MODE
               value: "release"
             - name: REDIS_HOST
@@ -31,11 +31,11 @@ spec:
                 secretKeyRef:
                   name: twfeel-secrets
                   key: REDIS_PASS
-            - name: ACCESS_TOKEN
+            - name: ACCESS_TOKENS
               valueFrom:
                 secretKeyRef:
                   name: twfeel-secrets
-                  key: ACCESS_TOKEN
+                  key: ACCESS_TOKENS
             - name: T_CONSUMER_KEY
               valueFrom:
                 secretKeyRef:

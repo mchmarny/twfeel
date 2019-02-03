@@ -29,7 +29,7 @@ service:
 	kubectl apply -f config/service.yaml
 
 service-new:
-	kubectl delete -f config/service.yaml
+	kubectl delete -f config/service.yaml --ignore-not-found=true
 	kubectl apply -f config/service.yaml
 
 query:

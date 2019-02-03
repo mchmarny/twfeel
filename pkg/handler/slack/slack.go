@@ -21,13 +21,12 @@ const (
 func Handler(c *gin.Context) {
 
 	// request
-	log.Printf("RequestURI: %v", c.Request.URL.Query())
 	post := Request{}
-	err := c.BindQuery(&post)
+	err := c.ShouldBind(&post)
 	if err != nil {
-		log.Printf("invalid body content: %v", err)
+		log.Printf("invalid query string content: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "Invalid body content",
+			"message": "Invalid query string content",
 			"status":  http.StatusBadRequest,
 		})
 		return
@@ -35,7 +34,7 @@ func Handler(c *gin.Context) {
 
 	log.Printf("Request: %v", post)
 
-	if post.Token == "" || post.Query == "" {
+	if post.Token == "" || post.Text == "" {
 		log.Println("invalid request")
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid request",
@@ -58,7 +57,7 @@ func Handler(c *gin.Context) {
 		return
 	}
 
-	queryText := strings.Trim(post.Query, " ")
+	queryText := strings.Trim(post.Text, " ")
 	log.Printf("Query: %s", queryText)
 
 	// run query and score

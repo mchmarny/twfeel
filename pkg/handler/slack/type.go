@@ -9,7 +9,7 @@ type Request struct {
 	UserID      string `form:"user_id"`
 	UserName    string `form:"user_name"`
 	Command     string `form:"command"`
-	Query       string `form:"text"`
+	Text        string `form:"text"`
 	ResponseURL string `form:"response_url"`
 }
 

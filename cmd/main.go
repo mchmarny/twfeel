@@ -9,6 +9,7 @@ import (
 	"github.com/mchmarny/twfeel/pkg/handler/chat"
 	"github.com/mchmarny/twfeel/pkg/handler/slack"
 	"github.com/mchmarny/twfeel/pkg/handler/rest"
+	"github.com/mchmarny/twfeel/pkg/handler/dump"
 
 	"github.com/gin-gonic/gin"
 
@@ -34,6 +35,7 @@ func main() {
 		v1.GET("/feel/:query", rest.Handler)
 		v1.POST("/chat", chat.Handler)
 		v1.POST("/slack", slack.Handler)
+		v1.Any("/dump", dump.Handler)
 	}
 
 	// root & health
