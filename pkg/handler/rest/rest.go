@@ -1,25 +1,20 @@
-package handler
+package rest
 
 import (
 	"log"
 	"net/http"
-	"os"
 
 	"github.com/mchmarny/twfeel/pkg/processor"
+	"github.com/mchmarny/twfeel/pkg/common"
 
 	"github.com/gin-gonic/gin"
 )
 
-var (
-	knownToken = os.Getenv("ACCESS_TOKEN")
-)
+// Handler handles queries from the REST interface
+func Handler(c *gin.Context) {
 
-// RestHandler handles queries from the REST interface
-func RestHandler(c *gin.Context) {
-
-	token := c.Query("token")
-	if token != knownToken {
-		log.Printf("invalid token. Got:%s Expected:%s", token, knownToken)
+	// token
+	if !common.IsValidAccessToken(c.Query("token")) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid access token",
 			"status":  http.StatusBadRequest,

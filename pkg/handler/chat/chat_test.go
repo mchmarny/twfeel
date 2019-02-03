@@ -1,4 +1,4 @@
-package handler
+package chat
 
 import (
 	"net/http"
@@ -14,13 +14,13 @@ import (
 
 func setupChatRouter() *gin.Engine {
 	r := gin.Default()
-	r.POST("/chat", ChatHandler)
+	r.POST("/chat", Handler)
 	return r
 }
 
 func TestChatHandler(t *testing.T) {
 
-	raw, err := ioutil.ReadFile("../../sample/request.json")
+	raw, err := ioutil.ReadFile("../../../sample/chat.json")
     if err != nil {
 		t.Error(raw)
 		return

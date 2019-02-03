@@ -1,4 +1,4 @@
-package handler
+package chat
 
 import (
 	"fmt"
@@ -13,15 +13,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const (
-	magnitudeThreshold     = 0.2
-)
-
-// ChatHandler handles queries from chat service
-func ChatHandler(c *gin.Context) {
+// Handler handles queries from chat service
+func Handler(c *gin.Context) {
 
 	// request
-	post := common.Request{}
+	post := Request{}
 	err := c.BindJSON(&post)
 	if err != nil {
 		log.Printf("invalid body content: %v", err)
@@ -37,8 +33,7 @@ func ChatHandler(c *gin.Context) {
 	log.Printf("Token: %s", post.Token)
 
 	// token
-	if post.Token != knownToken {
-		log.Printf("invalid token. Expected:%s Got:%s", knownToken, post.Token)
+	if !common.IsValidAccessToken(post.Token) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Invalid access token",
 			"status":  http.StatusBadRequest,
@@ -74,27 +69,21 @@ func ChatHandler(c *gin.Context) {
 		log.Fatal("BUG, result should never be nil")
 	}
 
-	/*
-		Clearly Positive*	"score": 0.8, 	"magnitude": 3.0
-		Clearly Negative*	"score": -0.6, 	"magnitude": 4.0
-		Neutral				"score": 0.1, 	"magnitude": 0.0
-		Mixed				"score": 0.0, 	"magnitude": 4.0
-	*/
-
 	// format results
 	sentiment := ""
-	if result.Score < -0.2 && result.Magnitude > magnitudeThreshold  {
-		sentiment = "`:(` negative"
-	} else if result.Score > 0.2 && result.Magnitude > magnitudeThreshold {
-		sentiment = "`:)` *positive*"
-	} else {
-		sentiment = "`:|` *meh*"
+	switch result.Sentiment {
+		case common.NegativeSentiment:
+			sentiment = "`:(` negative"
+		case common.PositiveSentiment:
+			sentiment = "`:)` *positive*"
+		default:
+			sentiment = "`:|` *meh*"
 	}
 
 	txt := "Hi <%s>, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s  -- meta: score *%.2f*, magnitude *%.2f*, <https://twitter.com/search?q=%s+-filter:retweets+until:%s|tweets>"
 	txt =  fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Score, result.Magnitude, queryText, time.Now().Format("2006-01-02"))
 
-	rez := &common.Message{Text: txt}
+	rez := &Message{Text: txt}
 
 	c.JSON(http.StatusOK, rez)
 

@@ -1,4 +1,4 @@
-package common
+package chat
 
 // Request object
 type Request struct {

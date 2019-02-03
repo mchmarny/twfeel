@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/mchmarny/twfeel/pkg/handler"
+	"github.com/mchmarny/twfeel/pkg/handler/chat"
+	"github.com/mchmarny/twfeel/pkg/handler/slack"
+	"github.com/mchmarny/twfeel/pkg/handler/rest"
 
 	"github.com/gin-gonic/gin"
 
@@ -29,8 +31,9 @@ func main() {
 	// api
 	v1 := r.Group("/v1")
 	{
-		v1.GET("/feel/:query", handler.RestHandler)
-		v1.POST("/chat", handler.ChatHandler)
+		v1.GET("/feel/:query", rest.Handler)
+		v1.POST("/chat", chat.Handler)
+		v1.POST("/chat", slack.Handler)
 	}
 
 	// root & health

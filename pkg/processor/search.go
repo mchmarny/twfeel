@@ -91,7 +91,6 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 		Tweets:  len(search.Statuses),
 	}
 
-
 	contents := make([]string, 0)
 	log.Printf("Found: %d", result.Tweets)
 	for _, tweet := range search.Statuses {
@@ -117,6 +116,7 @@ func Search(ctx context.Context, query string) (r *common.SentimentResult, err e
 	log.Printf("Score: %f, Magnitude: %f", result.Score,sentiment.Magnitude)
 	result.Magnitude = sentiment.Magnitude
 	result.Score = sentiment.Score
+	result.CalculateSentiment()
 
 	// set the cache
 	resultTLL := defaultCacheDuration
