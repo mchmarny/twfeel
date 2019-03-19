@@ -6,6 +6,7 @@ import (
 	"strings"
 	"fmt"
 	"time"
+	"net/url"
 
 	"github.com/mchmarny/twfeel/pkg/processor"
 	"github.com/mchmarny/twfeel/pkg/common"
@@ -108,7 +109,7 @@ func Handler(c *gin.Context) {
 			Text: "Tweets",
 			URL: fmt.Sprintf(
 				"https://twitter.com/search?q=%s+-filter:retweets+until:%s",
-				queryText, time.Now().Format("2006-01-02")),
+				url.QueryEscape(queryText), time.Now().Format("2006-01-02")),
 			Style: "primary",
 		},
 	}

@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: twfeel
   namespace: demo
-
 spec:
   runLatest:
     configuration:
@@ -16,10 +15,9 @@ spec:
         spec:
           container:
             image: gcr.io/s9-demo/twfeel:latest
-            imagePullPolicy: Always
             env:
             - name: RELEASE
-              value: "v0.3.8"
+              value: "v0.3.10"
             - name: GIN_MODE
               value: "release"
             - name: REDIS_HOST

@@ -6,6 +6,7 @@ import (
 	"time"
 	"net/http"
 	"strings"
+	"net/url"
 
 	"github.com/mchmarny/twfeel/pkg/processor"
 	"github.com/mchmarny/twfeel/pkg/common"
@@ -87,7 +88,7 @@ func Handler(c *gin.Context) {
 	}
 
 	txt := "Hi <%s>, I ran analyses on last *%d* tweets related to `%s` and the general sentiment is %s  -- meta: score *%.2f*, magnitude *%.2f*, <https://twitter.com/search?q=%s+-filter:retweets+until:%s|tweets>"
-	txt =  fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Score, result.Magnitude, queryText, time.Now().Format("2006-01-02"))
+	txt =  fmt.Sprintf(txt, senderName, result.Tweets, queryText, sentiment, result.Score, result.Magnitude, url.QueryEscape(queryText), time.Now().Format("2006-01-02"))
 
 	rez := &Message{Text: txt}
 
